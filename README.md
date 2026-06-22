@@ -14,7 +14,7 @@ No se versionan secretos. Configura las variables en el proveedor de hosting.
 Frontend:
 
 ```text
-VITE_API_URL=https://tu-backend-render.onrender.com
+VITE_API_URL=https://tu-backend-en-render.onrender.com
 VITE_TURNSTILE_SITE_KEY=tu_site_key_publica
 ```
 
@@ -22,7 +22,7 @@ Backend:
 
 ```text
 ASPNETCORE_ENVIRONMENT=Production
-AllowedHosts=localhost;127.0.0.1;globaccountservices.com;www.globaccountservices.com;api.globaccountservices.com;tu-backend.onrender.com
+AllowedHosts=localhost;127.0.0.1;globaccountservices.com;www.globaccountservices.com;api.globaccountservices.com;nombre-api.onrender.com
 Jwt__Key=<clave-larga-configurada-en-render>
 Smtp__Host=smtp.example.com
 Smtp__Port=587
@@ -35,7 +35,7 @@ Captcha__Enabled=true
 Captcha__SecretKey=<configurar-en-render>
 Cors__AllowedOrigins__0=https://globaccountservices.com
 Cors__AllowedOrigins__1=https://www.globaccountservices.com
-Cors__AllowedOrigins__2=https://tu-sitio-temporal.netlify.app
+Cors__AllowedOrigins__2=https://nombre-frontend.onrender.com
 Cors__AllowedOrigins__3=http://localhost:5173
 ```
 
@@ -66,6 +66,25 @@ Dockerfile Path: Dockerfile
 
 No guardes `Smtp__Password`, `Jwt__Key` ni `Captcha__SecretKey` en Git. Configuralos
 solo en Render -> Environment Variables.
+
+## Deploy frontend en Render Static Site
+
+```text
+Root Directory: frontend/login-app
+Build Command: npm install && npm run build
+Publish Directory: dist
+```
+
+Variables de entorno:
+
+```text
+VITE_API_URL=https://tu-backend-en-render.onrender.com
+VITE_TURNSTILE_SITE_KEY=tu_site_key_publica
+```
+
+Cuando Render entregue la URL real del backend, usa esa URL base HTTPS en
+`VITE_API_URL`, por ejemplo `https://nombre-api.onrender.com`. No incluyas
+`/api/contact`.
 
 ## Desarrollo
 
