@@ -18,12 +18,32 @@ VITE_API_URL=https://tu-backend-en-render.onrender.com
 VITE_TURNSTILE_SITE_KEY=tu_site_key_publica
 ```
 
-Backend:
+Backend en Render:
 
 ```text
 ASPNETCORE_ENVIRONMENT=Production
 AllowedHosts=localhost;127.0.0.1;globaccountservices.com;www.globaccountservices.com;api.globaccountservices.com;nombre-api.onrender.com
 Jwt__Key=<clave-larga-configurada-en-render>
+Email__Provider=Api
+EmailApi__Provider=Resend
+EmailApi__Endpoint=https://api.resend.com/emails
+EmailApi__ApiKey=<configurar-en-render>
+EmailApi__FromEmail=<correo-verificado-del-proveedor>
+EmailApi__FromName=Global Account Services
+EmailApi__ToEmail=hrcastros@yahoo.com
+EmailApi__TimeoutSeconds=30
+Captcha__Enabled=false
+Captcha__SecretKey=
+Cors__AllowedOrigins__0=https://globaccountservices.com
+Cors__AllowedOrigins__1=https://www.globaccountservices.com
+Cors__AllowedOrigins__2=https://globaccount-web.onrender.com
+```
+
+El backend mantiene SMTP solo como compatibilidad temporal. Para usarlo en un
+entorno no productivo, configura:
+
+```text
+Email__Provider=Smtp
 Smtp__Host=smtp.example.com
 Smtp__Port=587
 Smtp__Username=sender@example.com
@@ -31,12 +51,6 @@ Smtp__Password=<configurar-en-render>
 Smtp__RecipientEmail=recipient@example.com
 Smtp__EnableSsl=true
 Smtp__TimeoutSeconds=10
-Captcha__Enabled=true
-Captcha__SecretKey=<configurar-en-render>
-Cors__AllowedOrigins__0=https://globaccountservices.com
-Cors__AllowedOrigins__1=https://www.globaccountservices.com
-Cors__AllowedOrigins__2=https://nombre-frontend.onrender.com
-Cors__AllowedOrigins__3=http://localhost:5173
 ```
 
 `ASPNETCORE_URLS` normalmente no hace falta en Render porque la API lee la
@@ -64,8 +78,10 @@ Root Directory: backend/GlobAccountAPI
 Dockerfile Path: Dockerfile
 ```
 
-No guardes `Smtp__Password`, `Jwt__Key` ni `Captcha__SecretKey` en Git. Configuralos
-solo en Render -> Environment Variables.
+No guardes `EmailApi__ApiKey`, `Smtp__Password`, `Jwt__Key` ni
+`Captcha__SecretKey` en Git. Configuralos solo en Render -> Environment
+Variables. El frontend nunca debe llamar al proveedor de correo ni conocer
+`EmailApi__ApiKey`.
 
 ## Deploy frontend en Render Static Site
 

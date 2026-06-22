@@ -15,6 +15,8 @@ ConfigureRenderPort(builder);
 
 builder.Services.Configure<CaptchaOptions>(builder.Configuration.GetSection("Captcha"));
 builder.Services.Configure<ContactSecurityOptions>(builder.Configuration.GetSection("ContactSecurity"));
+builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
+builder.Services.Configure<EmailApiOptions>(builder.Configuration.GetSection("EmailApi"));
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor
@@ -61,7 +63,16 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options 
     };
 });
 
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<SmtpEmailService>();
+builder.Services.AddScoped<IEmailService, ConfiguredEmailService>();
+builder.Services.AddHttpClient<EmailApiService>((serviceProvider, client) =>
+{
+    var timeoutSeconds = serviceProvider
+        .GetRequiredService<IConfiguration>()
+        .GetValue<int?>("EmailApi:TimeoutSeconds") ?? 30;
+
+    client.Timeout = TimeSpan.FromSeconds(timeoutSeconds > 0 ? timeoutSeconds : 30);
+});
 builder.Services.AddHttpClient<ICaptchaVerifier, TurnstileCaptchaVerifier>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(
