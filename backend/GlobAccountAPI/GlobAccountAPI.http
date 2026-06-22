@@ -1,0 +1,6 @@
+@GlobAccountAPI_HostAddress = http://localhost:5093
+
+GET {{GlobAccountAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
