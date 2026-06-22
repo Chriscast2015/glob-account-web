@@ -9,18 +9,15 @@ namespace GlobAccountAPI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IOptions<CaptchaOptions> _options;
-        private readonly IWebHostEnvironment _environment;
         private readonly ILogger<TurnstileCaptchaVerifier> _logger;
 
         public TurnstileCaptchaVerifier(
             HttpClient httpClient,
             IOptions<CaptchaOptions> options,
-            IWebHostEnvironment environment,
             ILogger<TurnstileCaptchaVerifier> logger)
         {
             _httpClient = httpClient;
             _options = options;
-            _environment = environment;
             _logger = logger;
         }
 
@@ -30,25 +27,28 @@ namespace GlobAccountAPI.Services
             CancellationToken cancellationToken)
         {
             var options = _options.Value;
+            var secretConfigured = !string.IsNullOrWhiteSpace(options.SecretKey);
+
+            _logger.LogInformation(
+                "Captcha configuration. Enabled: {CaptchaEnabled}, SecretConfigured: {CaptchaSecretConfigured}",
+                options.Enabled,
+                secretConfigured);
 
             if (!options.Enabled)
             {
-                if (_environment.IsDevelopment())
-                {
-                    return CaptchaVerificationResult.Success();
-                }
-
-                return CaptchaVerificationResult.Failure("Captcha no configurado.");
+                _logger.LogInformation("Captcha disabled; skipping contact captcha validation.");
+                return CaptchaVerificationResult.Success();
             }
 
-            if (string.IsNullOrWhiteSpace(options.SecretKey))
+            if (!secretConfigured)
             {
-                _logger.LogError("Captcha habilitado sin Captcha:SecretKey.");
+                _logger.LogError("Captcha enabled but Captcha:SecretKey is not configured.");
                 return CaptchaVerificationResult.Failure("Captcha no configurado.");
             }
 
             if (string.IsNullOrWhiteSpace(token))
             {
+                _logger.LogWarning("Captcha enabled but request did not include a Turnstile token.");
                 return CaptchaVerificationResult.Failure("Captcha requerido.");
             }
 
