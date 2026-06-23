@@ -107,7 +107,7 @@ namespace GlobAccountAPI.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                _logger.LogError(ex, "Error de configuracion SMTP al enviar mensaje de contacto.");
+                _logger.LogError(ex, "Error de configuracion de correo al enviar mensaje de contacto.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError, new
                 {
@@ -115,6 +115,16 @@ namespace GlobAccountAPI.Controllers
                     message = _environment.IsDevelopment()
                         ? ex.Message
                         : "El servicio de correo no esta configurado correctamente."
+                });
+            }
+            catch (EmailDeliveryException ex)
+            {
+                _logger.LogError(ex, "Error del proveedor de correo al enviar mensaje de contacto.");
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    success = false,
+                    message = "No se pudo enviar el mensaje en este momento."
                 });
             }
             catch (SmtpException ex)
@@ -129,7 +139,7 @@ namespace GlobAccountAPI.Controllers
             }
             catch (TimeoutException ex)
             {
-                _logger.LogError(ex, "Timeout SMTP al enviar mensaje de contacto.");
+                _logger.LogError(ex, "Timeout al enviar mensaje de contacto.");
 
                 return StatusCode(StatusCodes.Status500InternalServerError, new
                 {

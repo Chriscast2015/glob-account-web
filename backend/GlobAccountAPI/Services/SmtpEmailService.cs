@@ -5,12 +5,12 @@ using GlobAccountAPI.DTOs;
 
 namespace GlobAccountAPI.Services
 {
-    public class EmailService : IEmailService
+    public class SmtpEmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<EmailService> _logger;
+        private readonly ILogger<SmtpEmailService> _logger;
 
-        public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+        public SmtpEmailService(IConfiguration configuration, ILogger<SmtpEmailService> logger)
         {
             _configuration = configuration;
             _logger = logger;
