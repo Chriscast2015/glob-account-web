@@ -29,7 +29,7 @@ const turnstileSiteKey = (import.meta.env.VITE_TURNSTILE_SITE_KEY ?? "").trim();
 const isCaptchaEnabled = Boolean(turnstileSiteKey);
 const turnstileScriptId = "cloudflare-turnstile-script";
 const mapEmbedUrl =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d249.36224838546732!2d-78.48583345074178!3d-0.19176214420410623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d59be95589162b%3A0xb75be24e5df6a0f0!2sCifuentes%20Estudio%20Fotografico!5e0!3m2!1ses!2sec!4v1778530051090!5m2!1ses!2sec";
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7959885320383!2d-78.4857236!3d-0.19170049999999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d59b279cddf2c5%3A0x52cb63ce525fc5e9!2sGlobal%20Account%20Services!5e0!3m2!1ses-419!2sec!4v1782331409684!5m2!1ses-419!2sec";
 
 const contactDetails = [
   {
@@ -495,7 +495,7 @@ export default function Contact() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
             ></iframe>
           </div>
         </div>
